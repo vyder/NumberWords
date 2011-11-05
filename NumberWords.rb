@@ -1,5 +1,5 @@
 module NumberWords
-  
+
   DIGITS = {  1=>"one",
               2=>"two",
               3=>"three",
@@ -31,22 +31,62 @@ module NumberWords
                 17=>"seventeen",
                 18=>"eighteen",
                 19=>"nineteen" }
+                
+  KEYWORDS = {  "zero"=>0,
+                "one"=>1,
+                "two"=>2,
+                "three"=>3,
+                "four"=>4,
+                "five"=>5,
+                "six"=>6,
+                "seven"=>7,
+                "eight"=>8,
+                "nine"=>9,
+                "ten"=>10,
+                "eleven"=>11,
+                "twelve"=>12,
+                "thirteen"=>13,
+                "fourteen"=>14,
+                "fifteen"=>15,
+                "sixteen"=>16,
+                "seventeen"=>17,
+                "eighteen"=>18,
+                "nineteen"=>19,
+                "twenty"=>20,
+                "thirty"=>30,
+                "forty"=>40,
+                "fifty"=>50,
+                "sixty"=>60,
+                "seventy"=>70,
+                "eighty"=>80,
+                "ninety"=>90 }
 
-  def self.validate( number )
+  ###############################################
+  #  Convert space delimited word form to number
+  # 
+  def self.getNumber( wordForm )
     
-    # Check valid type
-    if number.is_a?(Fixnum)
-      
-      # Check valid range
-      if number >= 0 and number < 100
-        return true
-      end
-      
-    end
+    words = wordForm.split
     
-    raise "This number cannot be converted in this version of NumberWords"
+    words.inject(0) { |number, word| number += KEYWORDS[word]  }
     
   end
+
+
+  ###############################################
+  #  Convert number to space delimited word form
+  # 
+  def self.validate( number )
+    
+    if number.is_a?(Fixnum) # Check valid type  
+      if number >= 0 and number < 100 # Check valid range
+        return true
+      end
+    end
+    raise "This number cannot be converted in this version of NumberWords"
+  end
+  
+  
   
   def self.getString( number )
     self.validate( number )
@@ -71,6 +111,13 @@ class TestNumberWords < Test::Unit::TestCase
   
   def test_true
     assert true
+  end
+  
+  # TODO -- Test string conversion more
+  def test_strings
+    assert_equal(1, NumberWords.getNumber("one"))
+    assert_equal(22, NumberWords.getNumber("twenty two"))
+    assert_equal(20, NumberWords.getNumber("twenty"))
   end
   
   def test_one
